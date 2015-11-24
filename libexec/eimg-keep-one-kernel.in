@@ -1,0 +1,11 @@
+#! /bin/bash
+
+i=0
+for pkg in `rpm -q kernel-core | sort -r`; do
+    i=$(( i + 1 ))
+    if test $i -eq 1; then
+        continue
+    fi
+
+    yum remove -y "$pkg"
+done

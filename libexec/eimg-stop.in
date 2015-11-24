@@ -1,0 +1,5 @@
+#! /bin/bash
+
+@insecure_ssh@ root@@pi_exp_host@ "rm -rf /var/lib/cloud/*"
+@insecure_ssh@ root@@pi_exp_host@ "shutdown -h now"
+sleep 10

@@ -1,0 +1,35 @@
+#! /bin/bash
+
+: ${prefix=/usr}
+
+tempdir=`mktemp -d /tmp/build-vm-XXXXXX`
+test -z "$tempdir" && die "can't create tempdir"
+
+@libexecdir@/eimg-wait "$1" || exit 1
+
+remote_run()
+{
+    local cmd="$1"
+    echo "running: $cmd"
+    @insecure_ssh@ root@@pi_exp_host@ "$cmd"
+}
+
+## task to be done on running guest ##
+remote_run 'rm -f /var/lib/random-seed'
+remote_run 'dnf remove linux-firmware -y'
+remote_run 'praiskup-images-keep-one-kernel'
+remote_run 'dnf clean all'
+remote_run 'truncate -c -s 0 /var/log/dnf.log'
+remote_run 'truncate -c -s 0 /var/log/dnf.rpm.log'
+remote_run 'rm -f /var/lib/rpm/__db*'
+remote_run 'rm -rf /var/lib/cloud/*'
+remote_run 'mkdir -p /var/cache/dnf'
+remote_run 'dd if=/usr/share/syslinux/mbr.bin of=/dev/vda'
+remote_run '/usr/sbin/fixfiles -R -a restore'
+remote_run 'dd if=/dev/zero of=/dd-fill'
+remote_run 'rm -rf /dd-fill'
+
+## shut down the guest ##
+@libexecdir@/eimg-stop || exit 1
+
+virt-sysprep -a "$1"

@@ -1,0 +1,5 @@
+# eimg == edit image
+bin     SCRIPTS         eimg-cleanup
+bin     SCRIPTS         eimg-prep
+bin     SCRIPTS         eimg-update
+bin     SCRIPTS         wait-for-ssh

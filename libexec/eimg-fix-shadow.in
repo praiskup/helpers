@@ -1,0 +1,5 @@
+#! /bin/bash
+
+. "$HOME/.config/eimg/config.sh"
+
+sed "s~^root:[^:]*~root:$root_etc_shaddow~" -i "$1"

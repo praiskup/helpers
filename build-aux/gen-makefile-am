@@ -1,0 +1,60 @@
+#! /bin/bash
+
+: ${target=.}
+
+files=
+files_in=
+
+bin_SCRIPTS=
+libexec_SCRIPTS=
+eimgdata_DATA=
+scripts=
+
+echo '/.gitignore' > "$target/.gitignore"
+
+while read dir primary file
+do
+    files+="$file
+"
+    files_in+="$file.in
+"
+
+    echo "$file" >> "$target/.gitignore"
+    case $primary in
+        SCRIPTS)
+            eval "${dir}_$primary+=' %D%/$file '"
+            scripts+=" %D%/$file "
+            ;;
+        DATA)
+            eval "${dir}_DATA+=' %D%/$file '"
+            data+=" %D%/$file "
+            ;;
+    esac
+done < <(grep -v '^#' < "$target/Makefile.inc.in")
+
+echo "bin_SCRIPTS += $bin_SCRIPTS"
+echo "libexec_SCRIPTS += $libexec_SCRIPTS"
+echo "eimgdata_DATA += $eimgdata_DATA "
+
+for t in data script
+do
+    var=$data
+    action='$(text_tpl_gen)'
+    case $t in
+        data)
+            ;;
+        script)
+            var=$scripts
+            action='$(text_tpl_gen_script)'
+            ;;
+    esac
+
+
+    for i in $var
+    do
+        echo "$i: \$(srcdir)/$i.in \$(c_s)"
+        echo "	$action"
+    done
+done
+
+echo "CLEANFILES += $bin_SCRIPTS $libexec_SCRIPTS $eimgdata_DATA"

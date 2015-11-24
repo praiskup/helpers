@@ -1,0 +1,10 @@
+#! /bin/bash
+
+config="$1"
+
+cp "$config" "$config.old"
+
+sed -i \
+    -e "s/^disable_root:.*/disable_root: 0/" \
+    -e "s/^ssh_pwauth:.*/ssh_pwauth: 1/" \
+    "$config"

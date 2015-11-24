@@ -1,0 +1,25 @@
+#! /bin/bash
+
+image="$1"
+
+dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
+test -z "$dir" && exit 1
+echo "using $dir"
+
+virt-builder --get-kernel "$image" --output "$dir"
+
+qemu-kvm -hda "$image" \
+    -m 1024 \
+    -drive file="$image",if=virtio \
+    -drive file="$HOME/.config/eimg/basic.img",if=virtio \
+    -kernel "$dir"/vmlinuz-* \
+    -initrd "$dir"/initramfs-* \
+    -append 'root=/dev/vda1 ro ds=nocloud-net' \
+    -net nic,macaddr=52:54:00:AA:00:01,model=virtio \
+    -net bridge,br=virbr0 \
+    &
+
+# TODO: Document how to setup this.
+@bindir@/wait-for-ssh root@192.168.122.100
+
+rm -rf "$dir"

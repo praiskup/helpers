@@ -1,0 +1,14 @@
+#! /bin/bash
+
+where="$1"
+
+while true; do
+    @insecure_ssh@ -q "$where" 'sleep 5 ; exit 91' &>/dev/null
+    if test $? -eq 91; then
+        exit 0
+    else
+        sleep 2
+    fi
+done
+
+exit 1
