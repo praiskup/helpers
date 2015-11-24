@@ -1,6 +1,6 @@
 #! /bin/bash -x
 
-@libexecdir@/eimg-wait "$@"
+@bindir@/eimg-wait "$@"
 @insecure_ssh@ root@@pi_exp_host@ "dnf update -y --exclude linux-firmware --setopt=tsflags=nodocs --setopt=deltarpm=0"
 # Hack for f22+
 @insecure_ssh@ root@@pi_exp_host@ "dnf install yum -y --setopt=tsflags=nodocs update"
