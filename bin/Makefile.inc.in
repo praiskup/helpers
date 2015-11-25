@@ -1,6 +1,8 @@
 # eimg == edit image
 bin     SCRIPTS         eimg-cleanup
+bin     SCRIPTS         eimg-minimize
 bin     SCRIPTS         eimg-prep
 bin     SCRIPTS         eimg-update
 bin     SCRIPTS         eimg-wait
+bin     SCRIPTS         db-fix-fedora-image
 bin     SCRIPTS         wait-for-ssh

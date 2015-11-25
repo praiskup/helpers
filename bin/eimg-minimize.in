@@ -1,0 +1,9 @@
+#! /bin/sh -x
+
+dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
+test -z "$dir" && exit 1
+echo "using $dir"
+
+qemu-img convert \
+    -f qcow2 "$1" -c -O qcow2 -o compat=0.10 \
+    "$dir/db-fedora-23-x86_64-`date -I`.qcow2"
