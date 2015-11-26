@@ -2,6 +2,6 @@
 
 @bindir@/eimg-wait "$@"
 @insecure_ssh@ root@@pi_exp_host@ "dnf update -y --setopt=tsflags=nodocs --setopt=deltarpm=0"
-# Hack for f22+
-@insecure_ssh@ root@@pi_exp_host@ "dnf install yum -y --setopt=tsflags=nodocs update"
+# Hack for f22+, used to work-around problems with ansible
+@insecure_ssh@ root@@pi_exp_host@ "dnf install yum -y --setopt=tsflags=nodocs"
 @libexecdir@/eimg-stop "$@"
