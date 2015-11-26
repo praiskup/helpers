@@ -16,7 +16,6 @@ remote_run()
 
 ## task to be done on running guest ##
 remote_run 'rm -f /var/lib/random-seed'
-remote_run 'dnf remove linux-firmware -y'
 remote_run 'rpm -e linux-firmware'
 remote_run 'eimg-keep-one-kernel'
 remote_run 'dnf clean all'
