@@ -1,0 +1,38 @@
+#! /bin/sh
+
+export tempdir
+
+die ()
+{
+    echo >&2 "$*"
+    exit 1
+}
+
+test -z "$tempdir" && die "no \$tempdir variable"
+echo >&2 "using $tempdir"
+
+ssh_key=$(cat "$HOME/.ssh/id_rsa.pub")
+test -z "$ssh_key" && die "no ssh key in ~/.ssh/id_rsa.pub?"
+
+dir="$tempdir"/cloud-seed
+mkdir -p "$dir/files" || die "can't create $dir"
+
+cat >"$dir/files/meta-data" <<EOF
+# this is yaml formated data
+
+instance-id: test-instance
+local-hostname: test-instance
+
+hostname: test-hostname
+
+public-keys:
+  ec2-keypair.us-east-1: [$ssh_key
+      ec2-keypair.us-east-1, '']
+EOF
+test $? -eq 0 || die "can't create meta-data"
+
+cat >"$dir/files/user-data" <<EOF
+EOF
+test $? -eq 0 || die "can't create meta-data"
+
+virt-make-fs --label=test-data "$dir/files" "$dir/basic.img"
