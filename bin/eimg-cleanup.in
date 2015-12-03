@@ -19,6 +19,11 @@
 
 : ${prefix=/usr}
 
+. "@eimgdatadir@"/lib
+
+eimg_pkg_manager
+pkgmanager=$eimg_pkg_manager_result
+
 tempdir=`mktemp -d /tmp/build-vm-XXXXXX`
 test -z "$tempdir" && die "can't create tempdir"
 
@@ -35,12 +40,12 @@ remote_run()
 remote_run 'rm -f /var/lib/random-seed'
 remote_run 'rpm -e linux-firmware'
 remote_run 'eimg-keep-one-kernel'
-remote_run 'dnf clean all'
-remote_run 'truncate -c -s 0 /var/log/dnf.log'
-remote_run 'truncate -c -s 0 /var/log/dnf.rpm.log'
+remote_run "$pkgmanager clean all"
+remote_run "truncate -c -s 0 /var/log/$pkgmanager.log"
+remote_run "truncate -c -s 0 /var/log/$pkgmanager.rpm.log"
 remote_run 'rm -f /var/lib/rpm/__db*'
 remote_run 'rm -rf /var/lib/cloud/*'
-remote_run 'mkdir -p /var/cache/dnf'
+remote_run "mkdir -p /var/cache/$pkgmanager"
 remote_run '/usr/sbin/fixfiles -R -a restore'
 remote_run 'dd if=/dev/zero of=/dd-fill'
 remote_run 'rm -rf /dd-fill'
