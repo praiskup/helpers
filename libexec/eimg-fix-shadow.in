@@ -17,6 +17,12 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+. "@eimgdatadir@"/lib
 . "$HOME/.config/eimg/config.sh"
+
+if test -n "$eimg_generate_root_passwd"; then
+    eimg_generate_passwd "$eimg_generate_root_passwd"
+    root_etc_shaddow=$eimg_generate_passwd_result
+fi
 
 sed "s~^root:[^:]*~root:$root_etc_shaddow~" -i "$1"

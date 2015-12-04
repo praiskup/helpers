@@ -41,3 +41,9 @@ eimg_pkg_manager ()
 {
     eimg_pkg_manager_result=`distgen_stdin_template <<<"{{ commands.pkginstaller.binary }}"`
 }
+
+eimg_generate_passwd ()
+{
+    eimg_generate_passwd_result=`openssl passwd -1 "$1"`
+    test -z "$eimg_generate_passwd_result" && die "can't generate passwd"
+}

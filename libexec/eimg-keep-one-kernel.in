@@ -18,6 +18,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+case $eimg_keep_all_kernels in
+    yes)
+        exit 0
+        ;;
+esac
+
 i=0
 for pkg in `rpm -q kernel-core | sort -r`; do
     i=$(( i + 1 ))

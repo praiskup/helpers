@@ -23,7 +23,7 @@ eimg_pkg_manager
 pkgmanager=$eimg_pkg_manager_result
 
 @bindir@/eimg-wait "$@"
-@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager update -y --setopt=tsflags=nodocs --setopt=deltarpm=0"
+@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager update -y --setopt=tsflags=nodocs --setopt=deltarpm=0 $eimg_pkgupdate_options"
 # Hack for f22+, used to work-around problems with ansible
 @insecure_ssh@ root@@pi_exp_host@ "$pkgmanager install yum -y --setopt=tsflags=nodocs"
 @libexecdir@/eimg-stop "$@"
