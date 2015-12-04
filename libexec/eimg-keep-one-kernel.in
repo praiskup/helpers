@@ -17,6 +17,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+. "@eimgdatadir@"/lib
 
 case $eimg_keep_all_kernels in
     yes)
@@ -24,10 +25,23 @@ case $eimg_keep_all_kernels in
         ;;
 esac
 
+case ${eimg_distro} in
+    fedora-20-*|fedora-19-*)
+        package_name=kernel
+        ;;
+    fedora-*)
+        package_name=kernel-core
+        ;;
+    *)
+        package_name=kernel
+        ;;
+esac
+
 i=0
-for pkg in `rpm -q kernel-core | sort -r`; do
+for pkg in `rpm -q "$package_name" | sort -r`; do
     i=$(( i + 1 ))
     if test $i -eq 1; then
+        eimg_info "keeping kernel: $i"
         continue
     fi
 
