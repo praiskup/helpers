@@ -24,6 +24,13 @@ dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
 test -z "$dir" && exit 1
 echo "using $dir"
 
+${DG-dg} --distro "${eimg_distro-fedora-rawhide-x86_64}.yaml" \
+    --template "@eimgtemplates@/keep-one-kernel.tpl" \
+    --output "$dir/eimg-keep-one-kernel" \
+  || exit 1
+
+chmod +x "$dir/eimg-keep-one-kernel" || exit 1
+
 guestfish <<EOF
 add $opt_image
 run
@@ -36,9 +43,10 @@ chmod 0600 /etc/ssh/sshd_config
 mkdir-p /root/.ssh
 !@libexecdir@/eimg-gen-auth-keys $dir/authorized_keys
 
+copy-in $dir/eimg-keep-one-kernel /usr/bin
+
 # authorized keys
 copy-in $dir/authorized_keys /root/.ssh
-copy-in @libexecdir@/eimg-keep-one-kernel /usr/bin
 chown 0 0 /root/.ssh/authorized_keys
 chmod 0600 /root/.ssh/authorized_keys
 

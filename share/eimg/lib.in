@@ -39,7 +39,7 @@ distgen_stdin_template ()
 
     cat > "$_eimg_tmp"
 
-    dg --distro "${eimg_distro-fedora-rawhide-x86_64}.yaml" --template "$_eimg_tmp"
+    ${DG-dg} --distro "${eimg_distro-fedora-rawhide-x86_64}.yaml" --template "$_eimg_tmp"
 }
 
 eimg_pkg_manager ()

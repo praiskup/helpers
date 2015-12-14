@@ -17,15 +17,17 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-. "@eimgdatadir@"/lib
 
-case $eimg_keep_all_kernels in
+distro={{ env['eimg_distro'] }}
+keep_all_kernels={{ env['eimg_keep_all_kernels'] }}
+
+case $keep_all_kernels in
     yes)
         exit 0
         ;;
 esac
 
-case ${eimg_distro} in
+case ${distro} in
     fedora-20-*|fedora-19-*)
         package_name=kernel
         ;;
@@ -41,9 +43,9 @@ i=0
 for pkg in `rpm -q "$package_name" | sort -r`; do
     i=$(( i + 1 ))
     if test $i -eq 1; then
-        eimg_info "keeping kernel: $i"
+        echo >&2 " * keeping kernel: $i"
         continue
     fi
 
-    yum remove -y "$pkg"
+    "{{ commands.pkginstaller.binary }}" remove -y "$pkg"
 done

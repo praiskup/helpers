@@ -12,6 +12,8 @@ AM_SILENT_RULES([yes])
 
 _AX_TEXT_TPL_INIT
 _AX_TEXT_TPL_SUBST([eimgdatadir], ['${datadir}/eimg'])
+_AX_TEXT_TPL_SUBST([eimgtemplates], ['${eimgdatadir}/templates'])
+
 
 insecure_ssh='ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 insecure_ssh="$insecure_ssh -o BatchMode=yes"
