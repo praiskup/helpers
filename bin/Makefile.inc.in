@@ -5,6 +5,5 @@ bin     SCRIPTS         eimg-minimize
 bin     SCRIPTS         eimg-prep
 bin     SCRIPTS         eimg-update
 bin     SCRIPTS         eimg-wait
-bin     SCRIPTS         eimg-ansible-fix
 bin     SCRIPTS         db-fix-fedora-image
 bin     SCRIPTS         wait-for-ssh
