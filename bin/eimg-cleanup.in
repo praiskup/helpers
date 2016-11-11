@@ -53,4 +53,4 @@ remote_run 'rm -rf /dd-fill'
 ## shut down the guest ##
 @libexecdir@/eimg-stop || exit 1
 
-virt-sysprep -a "$1"
+virt-sysprep -a "$1" --root-password disabled
