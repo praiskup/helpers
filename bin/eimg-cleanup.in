@@ -40,7 +40,9 @@ remote_run()
 remote_run 'rm -f /var/lib/random-seed'
 remote_run 'rpm -e linux-firmware'
 remote_run 'eimg-keep-one-kernel'
-remote_run "$pkgmanager clean all"
+for i in yum dnf yum-deprecated ; do
+    remote_run "$i clean all"
+done
 remote_run "truncate -c -s 0 /var/log/$pkgmanager.log"
 remote_run "truncate -c -s 0 /var/log/$pkgmanager.rpm.log"
 remote_run 'rm -f /var/lib/rpm/__db*'
