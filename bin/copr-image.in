@@ -1,6 +1,6 @@
-#! /bin/bash
+#! /bin/sh -x
 
-# Shutdown the edited machine.
+# Apply CI useful changes to Fedora Cloud image.
 # Copyright (C) 2015 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-test -n "$EIMG_WAITED" && $EIMG_WAITED && exit 0
-
-@insecure_ssh@ root@@pi_exp_host@ "rm -rf /var/lib/cloud/*"
-@insecure_ssh@ root@@pi_exp_host@ "shutdown -h now"
-sleep 10
+@bindir@/eimg-prep "$1" \
+    && @bindir@/eimg-wait "$@" \
+    && EIMG_WAITED=: @bindir@/eimg-update "$1" \
+    && EIMG_WAITED=: @bindir@/eimg-libvirt-guest "$1" \
+    && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
+    && @libexecdir@/eimg-stop "$1" \
+    && virt-sysprep -a "$1" --root-password disabled \
+    && @bindir@/eimg-minimize "$1"

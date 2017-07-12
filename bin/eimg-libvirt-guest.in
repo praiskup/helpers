@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Shutdown the edited machine.
+# Install/conifgure guest agent.
 # Copyright (C) 2015 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,12 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-test -n "$EIMG_WAITED" && $EIMG_WAITED && exit 0
+set -e
 
-@insecure_ssh@ root@@pi_exp_host@ "rm -rf /var/lib/cloud/*"
-@insecure_ssh@ root@@pi_exp_host@ "shutdown -h now"
-sleep 10
+. "@eimgdatadir@"/lib
+eimg_pkg_manager
+pkgmanager=$eimg_pkg_manager_result
+
+@bindir@/eimg-wait "$1"
+@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager install -y --setopt=tsflags=nodocs --setopt=deltarpm=0 qemu-guest-agent"
+@libexecdir@/eimg-stop "$1"

@@ -1,9 +1,12 @@
 # eimg == edit image
 bin     SCRIPTS         eimg-cleanup
+bin     SCRIPTS         eimg-cleanup-online
 bin     SCRIPTS         eimg-gen-cloud-seed
 bin     SCRIPTS         eimg-minimize
 bin     SCRIPTS         eimg-prep
 bin     SCRIPTS         eimg-update
 bin     SCRIPTS         eimg-wait
+bin     SCRIPTS         eimg-libvirt-guest
 bin     SCRIPTS         db-fix-fedora-image
+bin     SCRIPTS         copr-image
 bin     SCRIPTS         wait-for-ssh

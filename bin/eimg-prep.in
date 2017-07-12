@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -x
 
 # Prepare Fedora Cloud image for eimg-update.
 # Copyright (C) 2015 Red Hat, Inc.
