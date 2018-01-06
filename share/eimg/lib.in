@@ -52,3 +52,10 @@ eimg_generate_passwd ()
     eimg_generate_passwd_result=`openssl passwd -1 "$1"`
     test -z "$eimg_generate_passwd_result" && die "can't generate passwd"
 }
+
+eimg_remote_run ()
+{
+    local cmd="$1"
+    echo "running: $cmd"
+    @insecure_ssh@ root@@pi_exp_host@ "$cmd"
+}
