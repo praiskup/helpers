@@ -30,7 +30,7 @@ echo "using $dir"
 
 virt-builder --get-kernel "$image" --output "$dir"
 
-qemu-kvm -hda "$image" \
+qemu-kvm \
     -m 1024 \
     -drive file="$image",if=virtio \
     -drive file="$HOME/.config/eimg/basic.img",if=virtio \
