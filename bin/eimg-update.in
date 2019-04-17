@@ -27,7 +27,6 @@ pkgmanager=$eimg_pkg_manager_result
 
 ansible_hack_packages='
   libselinux-python
-  yum
 '
 
 case $eimg_ansible_fix in

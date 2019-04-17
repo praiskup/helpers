@@ -39,6 +39,11 @@ remote_run()
 ## task to be done on running guest ##
 remote_run 'rm -f /var/lib/random-seed'
 remote_run 'rpm -e linux-firmware'
+
+# restart to boot against updated kernel
+EIMG_WAITED=false @libexecdir@/eimg-stop || exit 1
+EIMG_WAITED=false @bindir@/eimg-wait "$1" || exit 1
+
 remote_run 'eimg-keep-one-kernel'
 for i in yum dnf yum-deprecated ; do
     remote_run "$i clean all"

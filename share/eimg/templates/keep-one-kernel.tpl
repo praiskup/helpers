@@ -43,7 +43,7 @@ i=0
 for pkg in `rpm -q "$package_name" | sort -r`; do
     i=$(( i + 1 ))
     if test $i -eq 1; then
-        echo >&2 " * keeping kernel: $i"
+        echo >&2 " * keeping kernel: $pkg"
         continue
     fi
 

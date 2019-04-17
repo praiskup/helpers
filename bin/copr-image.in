@@ -30,6 +30,8 @@ TYPE=Ethernet
 USERCTL=no
 DEFROUTE=no
 EOF
+
+    eimg_remote_run 'rm /etc/sysconfig/network-scripts/ifcfg-eth0'
 }
 
 
