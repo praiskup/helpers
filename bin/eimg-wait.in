@@ -20,6 +20,13 @@
 # Should we be "no-op" command?
 test -n "$EIMG_WAITED" && $EIMG_WAITED && exit 0
 
+
+# virsh net-edit default
+# <dhcp>
+#   ...
+#   <host mac='52:54:00:AA:00:01' ip='192.168.122.100' />
+# </dhcp>
+
 ip=192.168.122.100
 mac_address=52:54:00:AA:00:01
 image="$1"
@@ -37,8 +44,7 @@ qemu-kvm \
     -kernel "$dir"/vmlinuz-* \
     -initrd "$dir"/initramfs-* \
     -append 'root=/dev/vda1 ro ds=nocloud-net' \
-    -net nic,macaddr=$mac_address,model=virtio \
-    -net bridge,br=virbr0 \
+    -nic bridge,br=virbr0,mac=$mac_address,model=virtio \
     &
 
 
