@@ -43,6 +43,7 @@ qemu-kvm \
     -drive file="$HOME/.config/eimg/basic.img",if=virtio \
     -kernel "$dir"/vmlinuz-* \
     -initrd "$dir"/initramfs-* \
+    -object rng-random,id=eimg-random-device,filename=/dev/random \
     -append 'root=/dev/vda1 ro ds=nocloud-net' \
     -nic bridge,br=virbr0,mac=$mac_address,model=virtio \
     &
