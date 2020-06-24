@@ -32,6 +32,9 @@ DEFROUTE=no
 EOF
 
     eimg_remote_run 'rm /etc/sysconfig/network-scripts/ifcfg-eth0'
+
+    # fix ConfigDrive seed method in non-OpenStack environment
+    eimg_remote_run 'mv /usr/libexec/cloud-init/ds-identify /usr/libexec/cloud-init/ds-identify_backup'
 }
 
 
