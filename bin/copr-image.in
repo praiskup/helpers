@@ -1,6 +1,6 @@
 #! /bin/sh -x
 
-# Create Copr infra/builder image from the default Fedora Cloud image.
+# Create Copr builder image from the default Fedora Cloud image.
 # Copyright (C) 2020 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
