@@ -40,7 +40,12 @@ case ${distro} in
 esac
 
 i=0
-for pkg in `rpm -q "$package_name" | sort -r`; do
+
+kernel_packages=$(rpm -q "$package_name" | sort -r)
+echo "Kernel packages:"
+echo "$kernel_packages"
+
+for pkg in $kernel_packages; do
     i=$(( i + 1 ))
     if test $i -eq 1; then
         echo >&2 " * keeping kernel: $pkg"
