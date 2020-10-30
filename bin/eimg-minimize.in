@@ -24,4 +24,4 @@ echo "using $dir"
 
 qemu-img convert \
     -f qcow2 "$1" -c -O qcow2 -o compat=0.10 \
-    "$dir/db-fedora-x86_64-`date -I`.qcow2"
+    "$dir/eimg-fixed-`date -I`.qcow2"
