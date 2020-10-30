@@ -30,7 +30,7 @@ pkgmanager=$eimg_pkg_manager_result
 @insecure_ssh@ root@@pi_exp_host@ "rpm -e linux-firmware"
 
 ansible_hack_packages='
-  libselinux-python
+  python3-libselinux
 '
 
 case $eimg_ansible_fix in
