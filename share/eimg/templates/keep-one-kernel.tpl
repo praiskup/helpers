@@ -17,8 +17,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+set -o pipefail
 
-distro={{ env['eimg_distro'] }}
 keep_all_kernels={{ env['eimg_keep_all_kernels'] }}
 
 case $keep_all_kernels in
@@ -27,24 +27,22 @@ case $keep_all_kernels in
         ;;
 esac
 
-case ${distro} in
-    fedora-20-*|fedora-19-*)
-        package_name=kernel
-        ;;
-    fedora-*)
-        package_name=kernel-core
-        ;;
-    *)
-        package_name=kernel
-        ;;
-esac
+for pkg_kernel in kernel-core kernel not-installed; do
+    kernel_packages=$(rpm -q "$pkg_kernel" | sort -r)
+    if test $? -eq 0; then
+        break
+    fi
+done
 
-i=0
+if test $pkg_kernel = not-installed; then
+    echo >&2 "kernel package not found"
+    exit 1
+fi
 
-kernel_packages=$(rpm -q "$package_name" | sort -r)
 echo "Kernel packages:"
 echo "$kernel_packages"
 
+i=0
 for pkg in $kernel_packages; do
     i=$(( i + 1 ))
     if test $i -eq 1; then
