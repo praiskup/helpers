@@ -23,7 +23,11 @@ eimg_pkg_manager
 pkgmanager=$eimg_pkg_manager_result
 
 @bindir@/eimg-wait "$@"
-@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager update --exclude=linux-firmware -y --setopt=tsflags=nodocs --setopt=deltarpm=0 $eimg_pkgupdate_options"
+@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager update -y --setopt=tsflags=nodocs --setopt=deltarpm=0 $eimg_pkgupdate_options"
+
+# same as in fedora-kickstarts, we remove linux-firmware which is brought-in
+# with updated kernel-core
+@insecure_ssh@ root@@pi_exp_host@ "rpm -e linux-firmware"
 
 ansible_hack_packages='
   libselinux-python
