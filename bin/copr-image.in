@@ -21,17 +21,7 @@
 
 config_network()
 {
-    # TODO: how to configure eth1 via cloud-init?
-    eimg_remote_run 'cat > /etc/sysconfig/network-scripts/ifcfg-eth1' <<EOF
-BOOTPROTO=dhcp
-DEVICE=eth1
-ONBOOT=yes
-TYPE=Ethernet
-USERCTL=no
-DEFROUTE=no
-EOF
-
-    eimg_remote_run 'rm /etc/sysconfig/network-scripts/ifcfg-eth0'
+    eimg_remote_run 'echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/no-ipv6.conf'
 }
 
 
