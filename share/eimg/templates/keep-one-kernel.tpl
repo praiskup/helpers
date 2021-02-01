@@ -28,7 +28,7 @@ case $keep_all_kernels in
 esac
 
 for pkg_kernel in kernel-core kernel not-installed; do
-    kernel_packages=$(rpm -q "$pkg_kernel" | sort -r)
+    kernel_packages=$(rpm -q "$pkg_kernel" | sort -V -r)
     if test $? -eq 0; then
         break
     fi
