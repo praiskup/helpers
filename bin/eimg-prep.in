@@ -40,15 +40,8 @@ copy-out /etc/ssh/sshd_config $dir
 copy-in $dir/sshd_config /etc/ssh
 chown 0 0 /etc/ssh/sshd_config
 chmod 0600 /etc/ssh/sshd_config
-mkdir-p /root/.ssh
-!@libexecdir@/eimg-gen-auth-keys $dir/authorized_keys
 
 copy-in $dir/eimg-keep-one-kernel /usr/bin
-
-# authorized keys
-copy-in $dir/authorized_keys /root/.ssh
-chown 0 0 /root/.ssh/authorized_keys
-chmod 0600 /root/.ssh/authorized_keys
 
 # etc shadow
 copy-out /etc/shadow $dir
@@ -66,3 +59,7 @@ chmod 0644 /etc/cloud/cloud.cfg
 
 touch /.autorelabel
 EOF
+
+virt-sysprep -a "$opt_image" --network \
+    --install qemu-guest-agent  \
+    --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub"
