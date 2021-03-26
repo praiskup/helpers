@@ -23,11 +23,11 @@ dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
 test -z "$dir" && exit 1
 echo >&2 "using $dir"
 
-trap cleanup EXIT
 cleanup()
 {
     rm -rf "$dir"
 }
+trap cleanup EXIT
 
 guestfish <<EOF
 add $opt_image
@@ -39,8 +39,8 @@ copy-in $dir/sshd_config /etc/ssh
 chown 0 0 /etc/ssh/sshd_config
 chmod 0600 /etc/ssh/sshd_config
 
-copy-in @eimgfilesdir@/keep-one-kernel.sh /usr/bin/keep-one-kernel
-chmod 0755 /usr/bin/keep-one-kernel
+copy-in @eimgfilesdir@/keep-one-kernel.sh /usr/bin
+chmod 0755 /usr/bin/keep-one-kernel.sh
 
 # etc shadow
 copy-out /etc/shadow $dir
@@ -59,6 +59,14 @@ chmod 0644 /etc/cloud/cloud.cfg
 touch /.autorelabel
 EOF
 
+packages=qemu-guest-agent
+case $eimg_ansible_fix in
+  # Fix Ansible issues by default.  That's what we want most of the time.
+  yes|"")
+    packages=$packages,python3-libselinux
+    ;;
+esac
+
 virt-sysprep -a "$opt_image" --network \
-    --install qemu-guest-agent  \
+    --install $packages \
     --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub"

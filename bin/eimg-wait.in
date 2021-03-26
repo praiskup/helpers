@@ -17,46 +17,34 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+. "@eimgdatadir@"/lib
+
 # Should we be "no-op" command?
 test -n "$EIMG_WAITED" && $EIMG_WAITED && exit 0
 
+image=$1
 
-# virsh net-edit default
-# <dhcp>
-#   ...
-#   <host mac='52:54:00:AA:00:01' ip='192.168.122.100' />
-# </dhcp>
+workdir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
+test -z "$workdir" && exit 1
 
-ip=192.168.122.100
-mac_address=52:54:00:AA:00:01
-image="$1"
+cleanup()
+{
+    rm -rf "$workdir"
+}
+trap cleanup EXIT
 
-dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
-test -z "$dir" && exit 1
-echo "using $dir"
+echo "using $workdir"
 
-virt-builder --get-kernel "$image" --output "$dir"
+virt-install \
+    --name "$eimg_virt_name" \
+    --disk "$image" \
+    --memory=2048 \
+    --import \
+    --rng /dev/urandom \
+    --connect qemu:///system \
+    --vnc \
+    --noautoconsole \
+    --channel unix,target_type=virtio,name='org.qemu.guest_agent.0'
 
-qemu-kvm \
-    -m 1024 \
-    -drive file="$image",if=virtio \
-    -drive file="$HOME/.config/eimg/basic.img",if=virtio \
-    -kernel "$dir"/vmlinuz-* \
-    -initrd "$dir"/initramfs-* \
-    -object rng-random,id=eimg-random-device,filename=/dev/random \
-    -append 'root=/dev/vda1 ro ds=nocloud-net' \
-    -nic bridge,br=virbr0,mac=$mac_address,model=virtio \
-    &
-
-
-cat <<EOF
-
- ! Make sure you have properly configured your libvirt's DHCP so that
- ! the mac address $mac_address gets the right ip=$ip.
-
-EOF
-
-# TODO: Document how to setup this.
-@bindir@/wait-for-ssh root@$ip
-
-rm -rf "$dir"
+eimg_wait_for_ip
+@bindir@/wait-for-ssh root@$eimg_ip

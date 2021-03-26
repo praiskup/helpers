@@ -29,7 +29,6 @@ config_network()
 @bindir@/eimg-prep "$1" \
     && @bindir@/eimg-wait "$@" \
     && EIMG_WAITED=: @bindir@/eimg-update "$1" \
-    && EIMG_WAITED=: @bindir@/eimg-libvirt-guest "$1" \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
     && config_network \
     && @libexecdir@/eimg-stop "$1" \

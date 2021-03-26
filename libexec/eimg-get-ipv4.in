@@ -1,0 +1,79 @@
+#! /usr/bin/python3
+
+"""
+Obtain ipv4 address from a given domain; using qemu agent.
+"""
+
+# Copyright (C) 2021 Red Hat, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+import logging
+import sys
+
+import libvirt
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger()
+
+if len(sys.argv) != 2:
+    print("one argument (domain name) expected")
+    sys.exit(1)
+
+conn = libvirt.open()
+
+try:
+    domain_name = sys.argv[1]
+    log.info("using domain '%s'", domain_name)
+    dom0 = conn.lookupByName(domain_name)
+    interfaces = dom0.interfaceAddresses(libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT, 0)
+except libvirt.libvirtError:
+    sys.exit(1)
+
+def _main():
+    found = False
+    found_ipv4 = False
+    for interface in interfaces:
+        log.debug("checking interface %s", interface)
+        if interface != 'eth0':
+            log.debug("skipping interface %s", interface)
+            continue
+
+        found = True
+
+        if 'addrs' not in interfaces[interface]:
+            log.debug("addrs not in interface")
+            break
+
+        if not isinstance(interfaces[interface]['addrs'], list):
+            log.debug("addrs is not a list")
+            break
+
+        for address in interfaces[interface]['addrs']:
+            if address['type'] != libvirt.VIR_IP_ADDR_TYPE_IPV4:
+                continue
+            print(address['addr'])
+            sys.exit(0)
+
+    if not found:
+        log.error("interface eth0 not found")
+
+    if not found_ipv4:
+        log.error("eth0 has no ipv4 addres (yet?)")
+
+    sys.exit(1)
+
+if __name__ == "__main__":
+    _main()

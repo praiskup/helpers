@@ -19,20 +19,11 @@
 
 . "@eimgdatadir@"/lib
 
-config_network()
-{
-    # eimg_remote_run 'echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/no-ipv6.conf'
-    :
-}
-
-
 @bindir@/eimg-prep "$1" \
-    && @bindir@/eimg-wait "$@" \
+    && @bindir@/eimg-wait "$1" \
     && EIMG_WAITED=: @bindir@/eimg-update "$1" \
     && (cd /home/praiskup/rh/projects/rhcopr/pagure/vm-provisioning && ansible-playbook local-image-update.yml -i inventory) \
-    && EIMG_WAITED=: @bindir@/eimg-libvirt-guest "$1" \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
-    && config_network \
     && @libexecdir@/eimg-stop "$1" \
     && virt-sysprep -a "$1" --root-password disabled \
     && @bindir@/eimg-minimize "$1"

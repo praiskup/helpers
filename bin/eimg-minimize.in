@@ -21,6 +21,11 @@
 dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
 test -z "$dir" && exit 1
 echo "using $dir"
+cleanup()
+{
+    rm -rf "$dir"
+}
+trap cleanup EXIT
 
 qemu-img convert \
     -f qcow2 "$1" -c -O qcow2 -o compat=0.10 \

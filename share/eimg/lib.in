@@ -16,6 +16,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+: "${eimg_virt_name=eimg-img-prep}"
+: "${LIBVIRT_DEFAULT_URI=qemu:///system}"
+export LIBVIRT_DEFAULT_URI
+
 eimg_info ()
 {
     echo >&2 " * $*"
@@ -32,21 +36,6 @@ eimg_die ()
     exit 1
 }
 
-distgen_stdin_template ()
-{
-    _eimg_tmp=`mktemp /tmp/dg-workaround-XXXXX`
-    test -z "$_eimg_tmp" && eimg_die "can't create temp file"
-
-    cat > "$_eimg_tmp"
-
-    ${DG-dg} --distro "${eimg_distro-fedora-rawhide-x86_64}.yaml" --template "$_eimg_tmp"
-}
-
-eimg_pkg_manager ()
-{
-    eimg_pkg_manager_result=`distgen_stdin_template <<<"{{ commands.pkginstaller.binary }}"`
-}
-
 eimg_generate_passwd ()
 {
     eimg_generate_passwd_result=`openssl passwd -1 "$1"`
@@ -57,5 +46,27 @@ eimg_remote_run ()
 {
     local cmd="$1"
     echo "running: $cmd"
-    @insecure_ssh@ root@@pi_exp_host@ "$cmd"
+    @insecure_ssh@ root@$eimg_ip "$cmd"
+}
+
+eimg_load_ip ()
+{
+    eimg_ip=$( @libexecdir@/eimg-get-ipv4 "$eimg_virt_name" )
+    case $eimg_ip in
+    "") eimg_die "IP not found" ;;
+    *.*.*.*) ;;
+    *) eimg_die "$eimg_ip is not IPv4" ;;
+    esac
+}
+
+eimg_wait_for_ip ()
+{
+    until eimg_ip=$( @libexecdir@/eimg-get-ipv4 "$eimg_virt_name" ); do
+        sleep 3
+    done
+}
+
+eimg_guess_pkg_manager ()
+{
+    eimg_pkg_manager=$(@insecure_ssh@ "root@$eimg_ip" 'if rpm -q dnf &>/dev/null; then echo dnf; elif rpm -q microdnf &>/dev/null; then echo microdnf; else echo yum; fi')
 }

@@ -26,42 +26,42 @@ pkgmanager=$eimg_pkg_manager_result
 
 tempdir=`mktemp -d /tmp/build-vm-XXXXXX`
 test -z "$tempdir" && die "can't create tempdir"
+cleanup()
+{
+    rm -rf "$tempdir"
+}
+trap cleanup EXIT
 
 @bindir@/eimg-wait "$1" || exit 1
 
-remote_run()
-{
-    local cmd="$1"
-    echo "running: $cmd"
-    @insecure_ssh@ root@@pi_exp_host@ "$cmd"
-}
+eimg_load_ip
 
 ## task to be done on running guest ##
-remote_run 'rm -f /var/lib/random-seed'
-remote_run 'rpm -e linux-firmware'
+eimg_remote_run 'rm -f /var/lib/random-seed'
+eimg_remote_run 'rpm -e linux-firmware'
 
 # restart to boot against updated kernel
 EIMG_WAITED=false @libexecdir@/eimg-stop || exit 1
 EIMG_WAITED=false @bindir@/eimg-wait "$1" || exit 1
 
-remote_run 'eimg-keep-one-kernel'
+eimg_remote_run 'eimg-keep-one-kernel.sh'
 for i in yum dnf yum-deprecated ; do
-    remote_run "$i clean all"
+    eimg_remote_run "$i clean all"
 done
 
 # Drop the arg we need to locally start the image without config image, but that
 # would later fool the boot with cloud-init.  Also revert back the configuration
 # from fedora-kickstarts (cloud) that we removed in eimg-wait.
-remote_run "grubby --update-kernel=ALL --remove-args=ds=nocloud-net --args 'no_timer_check net.ifnames=0 console=tty1 console=ttyS0,115200n8'"
+eimg_remote_run "grubby --update-kernel=ALL --remove-args=ds=nocloud-net --args 'no_timer_check net.ifnames=0 console=tty1 console=ttyS0,115200n8'"
 
-remote_run "truncate -c -s 0 /var/log/$pkgmanager.log"
-remote_run "truncate -c -s 0 /var/log/$pkgmanager.rpm.log"
-remote_run 'rm -f /var/lib/rpm/__db*'
-remote_run 'rm -rf /var/lib/cloud/*'
-remote_run "mkdir -p /var/cache/$pkgmanager"
-remote_run '/usr/sbin/fixfiles -R -a restore'
-remote_run 'dd if=/dev/zero of=/dd-fill'
-remote_run 'rm -rf /dd-fill'
+eimg_remote_run "truncate -c -s 0 /var/log/$pkgmanager.log"
+eimg_remote_run "truncate -c -s 0 /var/log/$pkgmanager.rpm.log"
+eimg_remote_run 'rm -f /var/lib/rpm/__db*'
+eimg_remote_run 'rm -rf /var/lib/cloud/*'
+eimg_remote_run "mkdir -p /var/cache/$pkgmanager"
+eimg_remote_run '/usr/sbin/fixfiles -R -a restore'
+eimg_remote_run 'dd if=/dev/zero of=/dd-fill'
+eimg_remote_run 'rm -rf /dd-fill'
 
 ## shut down the guest ##
 @libexecdir@/eimg-stop || exit 1

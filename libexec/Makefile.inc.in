@@ -3,3 +3,4 @@ libexec SCRIPTS eimg-gen-auth-keys
 libexec SCRIPTS eimg-fix-shadow
 libexec SCRIPTS eimg-fix-cloud-init
 libexec SCRIPTS eimg-stop
+libexec SCRIPTS eimg-get-ipv4

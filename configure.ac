@@ -20,9 +20,6 @@ insecure_ssh='ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
 insecure_ssh="$insecure_ssh -o BatchMode=yes"
 _AX_TEXT_TPL_SUBST([insecure_ssh])
 
-# TODO: Document how to setup this with libvirt.
-_AX_TEXT_TPL_SUBST([pi_exp_host], [192.168.122.100])
-
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 AC_MSG_NOTICE([dnl

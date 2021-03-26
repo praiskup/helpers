@@ -19,31 +19,25 @@
 
 . "@eimgdatadir@"/lib
 
-eimg_pkg_manager
-pkgmanager=$eimg_pkg_manager_result
+image=$1
+@bindir@/eimg-wait "$image"
 
-@bindir@/eimg-wait "$@"
+eimg_load_ip
+eimg_guess_pkg_manager
 
-@insecure_ssh@ root@@pi_exp_host@ "echo 'tsflags=nodocs' >> /etc/dnf/dnf.conf"
-
-@insecure_ssh@ root@@pi_exp_host@ "$pkgmanager update -y --setopt=tsflags=nodocs --setopt=deltarpm=0 $eimg_pkgupdate_options"
-
-# same as in fedora-kickstarts, we remove linux-firmware which is brought-in
-# with updated kernel-core
-@insecure_ssh@ root@@pi_exp_host@ "rpm -e linux-firmware"
-
-ansible_hack_packages='
-  python3-libselinux
-'
-
-case $eimg_ansible_fix in
-  # Fix Ansible issues by default.  That's what we want most of the time.
-  yes|"")
-    # Hack for f22+, used to work-around problems with ansible
-    @insecure_ssh@ root@@pi_exp_host@ \
-        "$pkgmanager install -y --setopt=tsflags=nodocs" $ansible_hack_packages
+case $eimg_pkg_manager in
+*dnf*)
+    eimg_remote_run "echo 'tsflags=nodocs' >> /etc/dnf/dnf.conf"
+    ;;
+*)
+    eimg_remote_run "echo 'tsflags=nodocs' >> /etc/yum.conf"
     ;;
 esac
 
+eimg_remote_run "$eimg_pkg_manager update -y --setopt=tsflags=nodocs --setopt=deltarpm=0"
 
-@libexecdir@/eimg-stop "$@"
+# same as in fedora-kickstarts, we remove linux-firmware which is brought-in
+# with updated kernel-core
+eimg_remote_run "rpm -e linux-firmware"
+
+@libexecdir@/eimg-stop "$image"

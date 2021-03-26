@@ -6,7 +6,6 @@ bin     SCRIPTS         eimg-minimize
 bin     SCRIPTS         eimg-prep
 bin     SCRIPTS         eimg-update
 bin     SCRIPTS         eimg-wait
-bin     SCRIPTS         eimg-libvirt-guest
 bin     SCRIPTS         fix-fedora-cloud-image
 bin     SCRIPTS         copr-image
 bin     SCRIPTS         copr-image-infra
