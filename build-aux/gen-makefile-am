@@ -33,8 +33,7 @@ while read dir primary file
 do
     files+="$file
 "
-    files_in+="$file.in
-"
+    files_in+=" %D%/$file.in"
 
     echo "$file" >> "$target/.gitignore"
     case $primary in
@@ -75,3 +74,4 @@ do
 done
 
 echo "CLEANFILES += $bin_SCRIPTS $libexec_SCRIPTS $eimgdata_DATA"
+echo "EXTRA_DIST += $files_in %D%/Makefile.inc.in"

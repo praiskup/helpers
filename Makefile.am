@@ -2,9 +2,10 @@ bin_SCRIPTS =
 libexec_SCRIPTS =
 eimgdata_DATA =
 
-EXTRA_DIST =
+EXTRA_DIST = build-aux/gen-makefile-am
 CLEANFILES =
-DISTCLEANFILES = ChangeLog
+DISTCLEANFILES =
+
 GENERATED_FILES =
 ADDITIONAL_SED_SUBSTITUTIONS =
 
@@ -30,7 +31,7 @@ GL_GEN_BIN = gitlog-to-changelog
 GL_GEN = if test -d $(top_srcdir)/../.git; then \
 	   $(SHELL) $(top_srcdir)/$(config_aux_dir)/missing --run \
 	   $(GL_GEN_BIN) --format='%s%n%n%b%n' --since 2015-02-16 \
-	           $(GL_GEN_DIR) > ChangeLog ; \
+	           $(GL_GEN_DIR) > "$@" ; \
 	   rc=$$? ; \
 	   if test $$rc -eq 127; then \
 	     if test x"$$IGNORE_CHANGELOG" != xyes; then \
@@ -42,8 +43,9 @@ GL_GEN = if test -d $(top_srcdir)/../.git; then \
 	   fi \
 	 fi
 
-.PHONY: ChangeLog
-ChangeLog:
+changelog = $(distdir)/ChangeLog
+
+$(changelog):
 	$(AM_V_GEN)$(GL_GEN)
 
-dist-hook: ChangeLog
+dist-hook: $(changelog)
