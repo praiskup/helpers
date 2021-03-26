@@ -41,7 +41,7 @@ eimg_remote_run 'rpm -e linux-firmware'
 EIMG_WAITED=false @libexecdir@/eimg-stop || exit 1
 EIMG_WAITED=false @bindir@/eimg-wait "$1" || exit 1
 
-eimg_remote_run 'eimg-keep-one-kernel.sh'
+eimg_remote_run 'keep-one-kernel.sh'
 for i in yum dnf yum-deprecated ; do
     eimg_remote_run "$i clean all"
 done
