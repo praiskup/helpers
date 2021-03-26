@@ -22,7 +22,7 @@
 @bindir@/eimg-prep "$1" \
     && @bindir@/eimg-wait "$1" \
     && EIMG_WAITED=: @bindir@/eimg-update "$1" \
-    && (cd /home/praiskup/rh/projects/rhcopr/pagure/vm-provisioning && ansible-playbook local-image-update.yml -i inventory) \
+    && @libexec@/eimg-execute-playbook \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
     && @libexecdir@/eimg-stop "$1" \
     && virt-sysprep -a "$1" --root-password disabled \
