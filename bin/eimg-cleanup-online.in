@@ -21,9 +21,6 @@
 
 . "@eimgdatadir@"/lib
 
-eimg_pkg_manager
-pkgmanager=$eimg_pkg_manager_result
-
 tempdir=`mktemp -d /tmp/build-vm-XXXXXX`
 test -z "$tempdir" && die "can't create tempdir"
 cleanup()

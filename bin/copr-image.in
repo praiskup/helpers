@@ -22,7 +22,7 @@
 @bindir@/eimg-prep "$1" \
     && @bindir@/eimg-wait "$1" \
     && EIMG_WAITED=: @bindir@/eimg-update "$1" \
-    && @libexec@/eimg-execute-playbook \
+    && @libexecdir@/eimg-execute-playbook \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
     && @libexecdir@/eimg-stop "$1" \
     && virt-sysprep -a "$1" --root-password disabled \
