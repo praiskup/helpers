@@ -13,6 +13,7 @@ AM_SILENT_RULES([yes])
 _AX_TEXT_TPL_INIT
 _AX_TEXT_TPL_SUBST([eimgdatadir], ['${datadir}/eimg'])
 _AX_TEXT_TPL_SUBST([eimgtemplates], ['${eimgdatadir}/templates'])
+_AX_TEXT_TPL_SUBST([eimgfilesdir], ['${eimgdatadir}/files'])
 
 
 insecure_ssh='ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'

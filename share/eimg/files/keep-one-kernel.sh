@@ -19,13 +19,15 @@
 
 set -o pipefail
 
-keep_all_kernels={{ env['eimg_keep_all_kernels'] }}
+: "${keep_all_kernels=no}"
+test "$keep_all_kernels" = "yes" && exit 0
 
-case $keep_all_kernels in
-    yes)
-        exit 0
-        ;;
-esac
+dnf=yum
+if rpm -q dnf &>/dev/null; then
+    dnf=dnf
+elif rpm -q microdnf &>/dev/null; then
+    dnf=microdnf
+fi
 
 for pkg_kernel in kernel-core kernel not-installed; do
     kernel_packages=$(rpm -q "$pkg_kernel" | sort -V -r)
@@ -50,5 +52,5 @@ for pkg in $kernel_packages; do
         continue
     fi
 
-    "{{ commands.pkginstaller.binary }}" remove -y "$pkg"
+    $dnf remove -y "$pkg"
 done

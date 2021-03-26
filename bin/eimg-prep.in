@@ -17,19 +17,17 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
 opt_image="$1"
 
 dir=$(mktemp -d "/tmp/$(id -n -u)-eimg-XXXXXX")
 test -z "$dir" && exit 1
-echo "using $dir"
+echo >&2 "using $dir"
 
-${DG-dg} --distro "${eimg_distro-fedora-rawhide-x86_64}.yaml" \
-    --template "@eimgtemplates@/keep-one-kernel.tpl" \
-    --output "$dir/eimg-keep-one-kernel" \
-  || exit 1
-
-chmod +x "$dir/eimg-keep-one-kernel" || exit 1
+trap cleanup EXIT
+cleanup()
+{
+    rm -rf "$dir"
+}
 
 guestfish <<EOF
 add $opt_image
@@ -41,7 +39,8 @@ copy-in $dir/sshd_config /etc/ssh
 chown 0 0 /etc/ssh/sshd_config
 chmod 0600 /etc/ssh/sshd_config
 
-copy-in $dir/eimg-keep-one-kernel /usr/bin
+copy-in @eimgfilesdir@/keep-one-kernel.sh /usr/bin/keep-one-kernel
+chmod 0755 /usr/bin/keep-one-kernel
 
 # etc shadow
 copy-out /etc/shadow $dir
