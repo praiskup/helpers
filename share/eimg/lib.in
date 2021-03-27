@@ -46,7 +46,7 @@ eimg_remote_run ()
 {
     local cmd="$1"
     echo "running: $cmd"
-    @insecure_ssh@ root@$eimg_ip "$cmd"
+    @insecure_ssh@ "root@$eimg_ip" "$cmd"
 }
 
 eimg_load_ip ()
@@ -54,7 +54,7 @@ eimg_load_ip ()
     eimg_ip=$( @libexecdir@/eimg-get-ipv4 "$eimg_virt_name" )
     case $eimg_ip in
     "") eimg_die "IP not found" ;;
-    *.*.*.*) ;;
+    *.*.*.*) eimg_info "IP address is $eimg_ip" ;;
     *) eimg_die "$eimg_ip is not IPv4" ;;
     esac
 }
@@ -69,4 +69,5 @@ eimg_wait_for_ip ()
 eimg_guess_pkg_manager ()
 {
     eimg_pkg_manager=$(@insecure_ssh@ "root@$eimg_ip" 'if rpm -q dnf &>/dev/null; then echo dnf; elif rpm -q microdnf &>/dev/null; then echo microdnf; else echo yum; fi')
+    eimg_info "Guessed package manager: $eimg_pkg_manager"
 }

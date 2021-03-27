@@ -22,8 +22,9 @@ test -n "$EIMG_WAITED" && $EIMG_WAITED && exit 0
 . "@eimgdatadir@"/lib
 eimg_load_ip
 
-@insecure_ssh@ "root@$eimg_ip" "rm -rf /var/lib/cloud/*"
-@insecure_ssh@ "root@$eimg_ip" "shutdown -h now"
+eimg_remote_run "rm -rf /var/lib/cloud/*"
+eimg_remote_run "root@$eimg_ip" "shutdown -h now"
+
 virsh destroy "$eimg_virt_name"
 virsh undefine "$eimg_virt_name"
 sleep 10

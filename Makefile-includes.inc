@@ -10,3 +10,4 @@ $(srcdir)/share/eimg/Makefile.inc: $(srcdir)/share/eimg/Makefile.inc.in $(makefi
 include $(srcdir)/bin/Makefile.inc
 include $(srcdir)/libexec/Makefile.inc
 include $(srcdir)/share/eimg/Makefile.inc
+include $(srcdir)/share/eimg/files/Makefile.inc
