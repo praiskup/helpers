@@ -2,6 +2,7 @@ bin_SCRIPTS =
 libexec_SCRIPTS =
 eimgdata_DATA =
 sysconf_DATA =
+eimgconf_DATA =
 
 noinst_DATA = praiskup-helpers.spec
 

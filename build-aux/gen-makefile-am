@@ -25,6 +25,7 @@ files_in=
 bin_SCRIPTS=
 libexec_SCRIPTS=
 eimgdata_DATA=
+eimgconf_DATA=
 sysconf_DATA=
 scripts=
 
@@ -53,6 +54,7 @@ echo "bin_SCRIPTS += $bin_SCRIPTS"
 echo "libexec_SCRIPTS += $libexec_SCRIPTS"
 echo "eimgdata_DATA += $eimgdata_DATA "
 echo "sysconf_DATA += $sysconf_DATA"
+echo "eimgconf_DATA += $eimgconf_DATA"
 
 clean_files=
 for t in data script

@@ -38,11 +38,11 @@ make %{?_smp_mflags}
 %_bindir/eimg-*
 %_bindir/copr-*
 %_libexecdir/eimg-*
-%_sysconfdir/eimg.sh
 %_bindir/fix-fedora-cloud-image
 %_bindir/wait-for-ssh
 %dir %_datadir/eimg
-%config %_datadir/eimg/lib
+%dir %_sysconfdir/eimg
+%config(noreplace) %_sysconfdir/eimg/eimg.sh
 
 %changelog
 * Sat Mar 27 2021 Pavel Raiskup <praiskup@redhat.com> - 0.0
