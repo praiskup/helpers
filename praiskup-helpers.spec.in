@@ -16,7 +16,9 @@ URL: https://github.com/praiskup/helpers
 Source0: helpers-%version.tar.gz
 
 BuildRequires: make
-Requires: libguestfs-tools-c
+Requires: /usr/bin/virt-resize
+Requires: /usr/bin/guestfish
+Requires: /usr/bin/virsh
 
 %description
 
