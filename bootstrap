@@ -2,6 +2,11 @@
 
 set -e
 
+if test x"$1" = x--ci; then
+    commits=.git.$(git rev-list --count HEAD)
+    sed -i 's|\(AC_INIT(\[helpers\], \[\)\([^]]\+\)\(.*\)|\1\2'"$commits"'\3|' configure.ac
+fi
+
 gitdir=$(dirname "$0")
 cd "$gitdir"
 

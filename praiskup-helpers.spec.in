@@ -1,0 +1,49 @@
+# SPEC file overview:
+# https://docs.fedoraproject.org/en-US/quick-docs/creating-rpm-packages/#con_rpm-spec-file-overview
+# Fedora packaging guidelines:
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/
+
+
+Name: praiskup-helpers
+Version: @VERSION@
+Release: 1%{?dist}
+Summary: Helpers of Pavel Raiskup
+
+BuildArch: noarch
+
+License: GPLv3+
+URL: https://github.com/praiskup/helpers
+Source0: helpers-%version.tar.gz
+
+BuildRequires: make
+Requires: libguestfs-tools-c
+
+%description
+
+
+%prep
+%setup -q -n helpers-%version
+
+
+%build
+%configure
+make %{?_smp_mflags}
+
+
+%install
+%make_install
+
+
+%files
+%_bindir/eimg-*
+%_bindir/copr-*
+%_libexecdir/eimg-*
+%_sysconfdir/eimg.sh
+%_bindir/fix-fedora-cloud-image
+%_bindir/wait-for-ssh
+%dir %_datadir/eimg
+%config %_datadir/eimg/lib
+
+%changelog
+* Sat Mar 27 2021 Pavel Raiskup <praiskup@redhat.com> - 0.0
+- no rpm changelog from git builds

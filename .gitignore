@@ -6,6 +6,7 @@ ar-lib
 aclocal.m4
 autom4te.cache
 compile
+config.cache
 config.h
 config.h.in
 config.log
@@ -19,6 +20,11 @@ src/hello
 src/main.o
 stamp-h1
 *.log
+*.spec
+*.src.rpm
+*.tar.gz
 *~
 INSTALL
 COPYING
+helpers*/
+noarch

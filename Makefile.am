@@ -3,7 +3,9 @@ libexec_SCRIPTS =
 eimgdata_DATA =
 sysconf_DATA =
 
-EXTRA_DIST = build-aux/gen-makefile-am
+noinst_DATA = praiskup-helpers.spec
+
+EXTRA_DIST = build-aux/gen-makefile-am praiskup-helpers.spec.in
 CLEANFILES =
 DISTCLEANFILES =
 
@@ -50,3 +52,6 @@ $(changelog):
 	$(AM_V_GEN)$(GL_GEN)
 
 dist-hook: $(changelog)
+
+praiskup-helpers.spec: $(srcdir)/%D%/praiskup-helpers.spec.in $(c_s) Makefile
+	$(text_tpl_gen)
