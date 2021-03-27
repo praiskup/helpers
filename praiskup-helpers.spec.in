@@ -44,6 +44,7 @@ make %{?_smp_mflags}
 %_bindir/wait-for-ssh
 %dir %_datadir/eimg
 %_datadir/eimg/lib
+%_datadir/eimg/files
 %dir %_sysconfdir/eimg
 %config(noreplace) %_sysconfdir/eimg/eimg.sh
 
