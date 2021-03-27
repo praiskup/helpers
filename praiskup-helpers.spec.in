@@ -41,6 +41,7 @@ make %{?_smp_mflags}
 %_bindir/fix-fedora-cloud-image
 %_bindir/wait-for-ssh
 %dir %_datadir/eimg
+%_datadir/eimg/lib
 %dir %_sysconfdir/eimg
 %config(noreplace) %_sysconfdir/eimg/eimg.sh
 
