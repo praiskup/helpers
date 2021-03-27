@@ -2,7 +2,7 @@
 
 . "@eimgdatadir@"/lib
 : ${EIMG_PLAYBOOK=local-image-update.yml}
-: ${EIMG_PLAYBOOK_DIR=/home/praiskup/rh/projects/rhcopr/pagure/vm-provisioning}
+: ${EIMG_PLAYBOOK_DIR=/tmp}
 
 eimg_load_ip
 

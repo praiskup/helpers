@@ -25,6 +25,7 @@ files_in=
 bin_SCRIPTS=
 libexec_SCRIPTS=
 eimgdata_DATA=
+sysconf_DATA=
 scripts=
 
 echo '/.gitignore' > "$target/.gitignore"
@@ -51,7 +52,9 @@ done < <(grep -v '^#' < "$target/Makefile.inc.in")
 echo "bin_SCRIPTS += $bin_SCRIPTS"
 echo "libexec_SCRIPTS += $libexec_SCRIPTS"
 echo "eimgdata_DATA += $eimgdata_DATA "
+echo "sysconf_DATA += $sysconf_DATA"
 
+clean_files=
 for t in data script
 do
     var=$data
@@ -65,13 +68,14 @@ do
             ;;
     esac
 
-
     for i in $var
     do
         echo "$i: \$(srcdir)/$i.in \$(c_s)"
         echo "	$action"
+
+        clean_files+=" $i"
     done
 done
 
-echo "CLEANFILES += $bin_SCRIPTS $libexec_SCRIPTS $eimgdata_DATA"
+echo "CLEANFILES += $clean_files"
 echo "EXTRA_DIST += $files_in %D%/Makefile.inc.in"

@@ -18,11 +18,13 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 . "@eimgdatadir@"/lib
+. "@sysconfdir@"/eimg/eimg.sh
 
 @bindir@/eimg-prep "$1" \
     && @bindir@/eimg-wait "$1" \
     && EIMG_WAITED=: @bindir@/eimg-update "$1" \
-    && @libexecdir@/eimg-execute-playbook \
+    && EIMG_PLAYBOOK=$EIMG_COPR_PLAYBOOK EIMG_PLAYBOOK_DIR=$EIMG_COPR_PLAYBOOK_DIR \
+        @libexecdir@/eimg-execute-playbook \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
     && @libexecdir@/eimg-stop "$1" \
     && virt-sysprep -a "$1" --root-password disabled \

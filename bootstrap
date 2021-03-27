@@ -1,11 +1,11 @@
-#! /bin/bash -x
+#! /bin/bash
 
 set -e
 
 gitdir=$(dirname "$0")
 cd "$gitdir"
 
-for i in bin libexec share share/eimg
+for i in bin libexec share/eimg etc/eimg
 do
     target="$i" build-aux/gen-makefile-am > "$i/Makefile.inc"
 done

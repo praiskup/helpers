@@ -1,6 +1,7 @@
 bin_SCRIPTS =
 libexec_SCRIPTS =
 eimgdata_DATA =
+sysconf_DATA =
 
 EXTRA_DIST = build-aux/gen-makefile-am
 CLEANFILES =
