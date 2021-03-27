@@ -1,0 +1,17 @@
+#! /bin/bash
+
+set -e
+
+# we run this only for pull-requests, pushes are tested separately
+# by copr(tito) webhooks
+test "$TRAVIS_PULL_REQUEST" = false && exit 0
+
+# download up2date travis trigger
+curl -o copr-build https://raw.githubusercontent.com/praiskup/copr-ci-tooling/main/copr-travis-submit
+
+# trigger the build and watch it
+PACKAGE=praiskup-helpers
+PROJECT_ID=41573
+TOKEN=30bb4120-b3c3-46e0-bbd8-18e672dc2d0d
+export COPR_PR_WEBHOOK="https://copr.fedorainfracloud.org/webhooks/custom/$PROJECT_ID/$TOKEN/$PACKAGE/"
+exec bash copr-build
