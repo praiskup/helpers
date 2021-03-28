@@ -10,4 +10,5 @@ PACKAGE=praiskup-helpers
 PROJECT_ID=41573
 TOKEN=30bb4120-b3c3-46e0-bbd8-18e672dc2d0d
 export COPR_PR_WEBHOOK="https://copr.fedorainfracloud.org/webhooks/custom/$PROJECT_ID/$TOKEN/$PACKAGE/"
+export COPR_PUSH_WEBHOOK
 exec bash copr-build
