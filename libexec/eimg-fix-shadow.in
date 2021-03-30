@@ -18,11 +18,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 . "@eimgdatadir@"/lib
-. "$HOME/.config/eimg/config.sh"
+. "@eimgconfdir@"/eimg.sh
 
-if test -n "$eimg_generate_root_passwd"; then
-    eimg_generate_passwd "$eimg_generate_root_passwd"
-    root_etc_shaddow=$eimg_generate_passwd_result
+SHADOW=
+if test -n "$EIMG_ROOT_PASSWORD"; then
+    eimg_generate_passwd "$EIMG_ROOT_PASSWORD"
+    SHADOW=$eimg_generate_passwd_result
+elif test -n "$EIMG_ROOT_SHADOW"; then
+    SHADOW=$EIMG_ROOT_SHADOW
 fi
 
-sed "s~^root:[^:]*~root:$root_etc_shaddow~" -i "$1"
+test -z "$SHADOW" && exit 0
+
+sed "s~^root:[^:]*~root:$SHADOW~" -i "$1"

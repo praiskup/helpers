@@ -1,2 +1,4 @@
 EIMG_COPR_PLAYBOOK_DIR=@eimg_copr_playbook_dir@
 EIMG_COPR_PLAYBOOK=@eimg_copr_playbook@
+EIMG_ROOT_SHADOW=
+EIMG_ROOT_PASSWORD=
