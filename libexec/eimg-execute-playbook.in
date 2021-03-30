@@ -8,4 +8,5 @@ eimg_load_ip
 
 cd "$EIMG_PLAYBOOK_DIR" || exit 1
 
+ANSIBLE_HOST_KEY_CHECKING=False \
 ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK"
