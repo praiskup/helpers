@@ -20,12 +20,37 @@
 . "@eimgdatadir@"/lib || exit 1
 . /etc/eimg/eimg.sh || exit 1
 
-@bindir@/eimg-prep "$1" \
-    && @bindir@/eimg-wait "$1" \
-    && EIMG_WAITED=: @bindir@/eimg-update "$1" \
+tmpdir=/tmp
+orig_image=$1
+downloaded_image=$tmpdir/$(basename "$orig_image")
+
+if test -f "$downloaded_image"; then
+    echo "using pre-downloaded image $downloaded_image"
+else
+    echo "Going to download $orig_image into $downloaded_image"
+    curl -L -f "$orig_image" > "$downloaded_image" || {
+        echo "can not download"
+        rm -rf "$downloaded_image"
+        exit 1
+    }
+fi
+
+image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
+
+cleanup()
+{
+    rm -rf "$image_wip"
+}
+trap cleanup EXIT
+
+cp -f "$downloaded_image" "$image_wip"
+
+@bindir@/eimg-prep "$image_wip" \
+    && @bindir@/eimg-wait "$image_wip" \
+    && EIMG_WAITED=: @bindir@/eimg-update "$image_wip" \
     && EIMG_PLAYBOOK=$EIMG_COPR_PLAYBOOK EIMG_PLAYBOOK_DIR=$EIMG_COPR_PLAYBOOK_DIR \
         @libexecdir@/eimg-execute-playbook \
-    && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
-    && @libexecdir@/eimg-stop "$1" \
-    && virt-sysprep -a "$1" --root-password disabled \
-    && @bindir@/eimg-minimize "$1"
+    && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$image_wip" \
+    && @libexecdir@/eimg-stop "$image_wip" \
+    && virt-sysprep -a "$image_wip" --root-password disabled \
+    && @bindir@/eimg-minimize "$image_wip"
