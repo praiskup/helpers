@@ -17,8 +17,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-. "@eimgdatadir@"/lib
-. "@sysconfdir@"/eimg/eimg.sh
+. "@eimgdatadir@"/lib || exit 1
+. /etc/eimg/eimg.sh || exit 1
 
 @bindir@/eimg-prep "$1" \
     && @bindir@/eimg-wait "$1" \
