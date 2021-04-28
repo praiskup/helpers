@@ -9,6 +9,9 @@ virt-sysprep, starts a VM using that image and executes the playbook against the
 VM.  Once that is done, a new qcow2 image is generated from that VM, and the
 image is minimized.
 
+Something like this could be implemented in `virt-sysprep` directly:
+https://bugzilla.redhat.com/show_bug.cgi?id=1954513
+
 Quick HOWTO:
 
 ```
