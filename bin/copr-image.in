@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#! /bin/bash -x
 
 # Create Copr builder image from the default Fedora Cloud image.
 # Copyright (C) 2020 Red Hat, Inc.
@@ -52,5 +52,5 @@ cp -f "$downloaded_image" "$image_wip"
         @libexecdir@/eimg-execute-playbook \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$image_wip" \
     && @libexecdir@/eimg-stop "$image_wip" \
-    && virt-sysprep -a "$image_wip" --root-password disabled \
+    && virt-sysprep -a "$image_wip" --root-password disabled "${EIMG_FINAL_SYSPREP_ARGS[@]}" \
     && @bindir@/eimg-minimize "$image_wip"
