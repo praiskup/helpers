@@ -58,6 +58,7 @@ chmod 0644 /etc/cloud/cloud.cfg
 
 # libvirt custom config drive
 write        /etc/rc.d/rc.local "#! /bin/sh\n"
+write-append /etc/rc.d/rc.local "set -x\n"
 write-append /etc/rc.d/rc.local "set -e\n"
 write-append /etc/rc.d/rc.local "touch /eimg-config-tried\n"
 write-append /etc/rc.d/rc.local "lsblk -o label /dev/sr0 | grep eimg_config || exit 0\n"
