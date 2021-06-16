@@ -27,6 +27,8 @@ git clone \
 cd "$workdir"
 copr-travis-checkout "$hook_payload"
 
+git submodule update --init
+
 ./bootstrap --ci
 make dist
 
