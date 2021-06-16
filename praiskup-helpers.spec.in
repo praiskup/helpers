@@ -35,12 +35,14 @@ make %{?_smp_mflags}
 
 %install
 %make_install
+sed '1 s|^.*$|#! /usr/bin/python3|' -i %buildroot%_bindir/wait-for-ssh
 
 
 %files
 %_bindir/eimg-*
 %_bindir/copr-*
 %_libexecdir/eimg-*
+%_bindir/copr-run-aws-instance
 %_bindir/fix-fedora-cloud-image
 %_bindir/wait-for-ssh
 %dir %_datadir/eimg

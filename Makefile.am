@@ -1,4 +1,4 @@
-bin_SCRIPTS =
+bin_SCRIPTS = git-submodules/wait-for-ssh/wait-for-ssh
 libexec_SCRIPTS =
 eimgdata_DATA =
 sysconf_DATA =
@@ -6,7 +6,8 @@ eimgconf_DATA =
 
 noinst_DATA = praiskup-helpers.spec
 
-EXTRA_DIST = build-aux/gen-makefile-am praiskup-helpers.spec.in
+EXTRA_DIST = build-aux/gen-makefile-am praiskup-helpers.spec.in \
+	     git-submodules/wait-for-ssh/wait-for-ssh
 CLEANFILES =
 DISTCLEANFILES =
 
