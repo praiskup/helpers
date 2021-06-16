@@ -9,4 +9,4 @@ bin     SCRIPTS         eimg-wait
 bin     SCRIPTS         fix-fedora-cloud-image
 bin     SCRIPTS         copr-image
 bin     SCRIPTS         copr-image-infra
-bin     SCRIPTS         wait-for-ssh
+bin     SCRIPTS         copr-run-aws-instance
