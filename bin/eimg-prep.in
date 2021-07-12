@@ -29,10 +29,17 @@ cleanup()
 }
 trap cleanup EXIT
 
+part=sda1
+case $(uname -m) in
+    ppc64le)
+        part=sda2
+        ;;
+esac
+
 guestfish <<EOF
 add $opt_image
 run
-mount /dev/sda1 /
+mount /dev/$part /
 copy-out /etc/ssh/sshd_config $dir
 !sed -i -e "s/^PasswordAuthentication.*/PasswordAuthentication yes/" -e "s/#\\?PermitRootLogin.*/PermitRootLogin yes/" $dir/sshd_config
 copy-in $dir/sshd_config /etc/ssh
