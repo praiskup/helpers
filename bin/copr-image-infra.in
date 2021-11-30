@@ -37,5 +37,5 @@ config_network()
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$image_wip" \
     && config_network \
     && @libexecdir@/eimg-stop "$image_wip" \
-    && virt-sysprep -a "$image_wip" --root-password disabled \
+    && eimg-podman-virt-sysprep -a "$image_wip" --root-password disabled \
     && @bindir@/eimg-minimize "$image_wip"

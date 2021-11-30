@@ -36,8 +36,7 @@ case $(uname -m) in
         ;;
 esac
 
-guestfish <<EOF
-add $opt_image
+eimg-podman-guestfish -a "$opt_image" <<EOF
 run
 #mount /dev/$part /
 mount btrfsvol:/dev/sda5/root /
@@ -87,6 +86,7 @@ case $eimg_ansible_fix in
     ;;
 esac
 
-virt-sysprep -a "$opt_image" --network \
+eimg-podman-virt-sysprep \
+    -a "$opt_image" --network \
     --install $packages \
     --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub"
