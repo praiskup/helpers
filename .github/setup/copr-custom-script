@@ -25,7 +25,7 @@ git clone \
 
 # checkout requested revision
 cd "$workdir"
-copr-travis-checkout "$hook_payload"
+webhook-checkout "$hook_payload"
 
 git submodule update --init
 
