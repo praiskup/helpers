@@ -19,18 +19,23 @@
 
 . "@eimgdatadir@"/lib
 
+tmpdir=/tmp
+orig_image=$1
+eimg_download_image "$orig_image"
+image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
+cp "$eimg_download_image_result" "$image_wip"
+
 config_network()
 {
     # eimg_remote_run 'echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/no-ipv6.conf'
     :
 }
 
-
-@bindir@/eimg-prep "$1" \
-    && @bindir@/eimg-wait "$@" \
-    && EIMG_WAITED=: @bindir@/eimg-update "$1" \
-    && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$1" \
+@bindir@/eimg-prep "$image_wip" \
+    && @bindir@/eimg-wait "$image_wip" \
+    && EIMG_WAITED=: @bindir@/eimg-update "$image_wip" \
+    && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$image_wip" \
     && config_network \
-    && @libexecdir@/eimg-stop "$1" \
-    && virt-sysprep -a "$1" --root-password disabled \
-    && @bindir@/eimg-minimize "$1"
+    && @libexecdir@/eimg-stop "$image_wip" \
+    && virt-sysprep -a "$image_wip" --root-password disabled \
+    && @bindir@/eimg-minimize "$image_wip"

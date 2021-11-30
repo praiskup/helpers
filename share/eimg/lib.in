@@ -71,3 +71,20 @@ eimg_guess_pkg_manager ()
     eimg_pkg_manager=$(@insecure_ssh@ "root@$eimg_ip" 'if rpm -q dnf &>/dev/null; then echo dnf; elif rpm -q microdnf &>/dev/null; then echo microdnf; else echo yum; fi')
     eimg_info "Guessed package manager: $eimg_pkg_manager"
 }
+
+eimg_download_image ()
+{
+  _tmpdir=/tmp
+  _orig_image=$1
+  eimg_download_image_result=$_tmpdir/$(basename "$_orig_image")
+  if test -f "$eimg_download_image_result"; then
+      echo "using pre-downloaded image $eimg_download_image_result"
+  else
+      echo "Going to download $_orig_image into $eimg_download_image_result"
+      curl -L -f "$_orig_image" > "$eimg_download_image_result" || {
+          echo "can not download"
+          rm -rf "$eimg_download_image_result"
+          exit 1
+      }
+  fi
+}

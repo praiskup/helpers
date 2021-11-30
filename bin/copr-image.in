@@ -22,19 +22,7 @@
 
 tmpdir=/tmp
 orig_image=$1
-downloaded_image=$tmpdir/$(basename "$orig_image")
-
-if test -f "$downloaded_image"; then
-    echo "using pre-downloaded image $downloaded_image"
-else
-    echo "Going to download $orig_image into $downloaded_image"
-    curl -L -f "$orig_image" > "$downloaded_image" || {
-        echo "can not download"
-        rm -rf "$downloaded_image"
-        exit 1
-    }
-fi
-
+eimg_download_image "$orig_image"
 image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
 
 cleanup()
@@ -43,7 +31,7 @@ cleanup()
 }
 trap cleanup EXIT
 
-cp -f "$downloaded_image" "$image_wip"
+cp -f "$eimg_download_image_result" "$image_wip"
 
 @bindir@/eimg-prep "$image_wip" \
     && @bindir@/eimg-wait "$image_wip" \
