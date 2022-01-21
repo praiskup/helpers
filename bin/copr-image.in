@@ -31,6 +31,11 @@ cleanup()
 }
 trap cleanup EXIT
 
+key_name=$HOME/.ssh/id_rsa
+test -f "$key_name" || {
+    ssh-keygen -b 4096 -t rsa -f "$key_name" -q -N ""
+}
+
 cp -f "$eimg_download_image_result" "$image_wip"
 
 @bindir@/eimg-prep "$image_wip" \
