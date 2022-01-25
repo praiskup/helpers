@@ -36,6 +36,8 @@ eimg_load_ip
 ## task to be done on running guest ##
 eimg_remote_run 'rm -f /var/lib/random-seed'
 eimg_remote_run 'rpm -e linux-firmware'
+eimg_remote_run 'sync'
+sync
 
 # restart to boot against updated kernel
 EIMG_WAITED=false @libexecdir@/eimg-stop || exit 1
