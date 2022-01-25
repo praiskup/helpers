@@ -1,0 +1,18 @@
+#! /bin/sh -x
+
+set -e
+
+image=fedora:35
+appliance_dir=$1
+die() { echo >&2 "ERROR: $*"; exit 1; }
+
+test -z "$appliance_dir" && die "Directory argument required"
+test -e "$appliance_dir" && die "$appliance_dir already exists"
+mkdir -p "$appliance_dir"
+
+podman run --security-opt label=disable --rm -ti -v "$appliance_dir:/appliance" $image /bin/sh -c '
+    dnf install -y libguestfs-devel
+    dnf update -y kernel-core
+    export LIBGUESTFS_BACKEND=direct
+    libguestfs-make-fixed-appliance /appliance
+'

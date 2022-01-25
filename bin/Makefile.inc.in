@@ -1,4 +1,5 @@
 # eimg == edit image
+bin     SCRIPTS         eimg-appliance-in-container
 bin     SCRIPTS         eimg-cleanup
 bin     SCRIPTS         eimg-cleanup-online
 bin     SCRIPTS         eimg-gen-cloud-seed

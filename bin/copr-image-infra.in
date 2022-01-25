@@ -25,6 +25,9 @@ eimg_download_image "$orig_image"
 image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
 cp "$eimg_download_image_result" "$image_wip"
 
+export LIBGUESTFS_PATH=/tmp/libguestfs-fedora-appliance
+@bindir@/eimg-appliance-in-container "$LIBGUESTFS_PATH" || :
+
 config_network()
 {
     # eimg_remote_run 'echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/no-ipv6.conf'

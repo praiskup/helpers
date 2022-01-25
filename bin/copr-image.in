@@ -25,6 +25,9 @@ orig_image=$1
 eimg_download_image "$orig_image"
 image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
 
+export LIBGUESTFS_PATH=/tmp/libguestfs-fedora-appliance
+@bindir@/eimg-appliance-in-container "$LIBGUESTFS_PATH" || :
+
 cleanup()
 {
     rm -rf "$image_wip"
