@@ -61,7 +61,7 @@ eimg_remote_run 'rm -rf /var/lib/cloud/*'
 eimg_remote_run "mkdir -p /var/cache/$pkgmanager"
 eimg_remote_run '/usr/sbin/fixfiles -R -a restore'
 eimg_remote_run 'dd if=/dev/zero of=/dd-fill'
-eimg_remote_run 'rm /dd-fill && sync'
+eimg_remote_run 'btrfs filesystem sync / ; rm /dd-fill && sync ; btrfs filesystem sync /'
 
 ## shut down the guest ##
 @libexecdir@/eimg-stop || exit 1
