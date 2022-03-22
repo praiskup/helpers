@@ -59,6 +59,7 @@ eimg_remote_run "truncate -c -s 0 /var/log/$pkgmanager.rpm.log"
 eimg_remote_run 'rm -f /var/lib/rpm/__db*'
 eimg_remote_run 'rm -rf /var/lib/cloud/*'
 eimg_remote_run "mkdir -p /var/cache/$pkgmanager"
+eimg_remote_run "truncate --size 0 /etc/resolv.conf"
 eimg_remote_run '/usr/sbin/fixfiles -R -a restore'
 eimg_remote_run 'dd if=/dev/zero of=/dd-fill'
 eimg_remote_run 'btrfs filesystem sync / ; rm /dd-fill && sync ; btrfs filesystem sync /'
