@@ -1,0 +1,41 @@
+#! /bin/bash
+
+. /etc/eimg/eimg.sh || exit 1
+
+new_args=()
+podman_args=()
+image=libguestfs
+base_cmd=$(basename "$0")
+cmd=${base_cmd//eimg-/}
+cmd=${cmd//podman-/}
+
+if ! ${EIMG_LIBGUESTFS_USE_PODMAN-false}; then
+    # execute directly on the host
+    exec "$cmd" "$@"
+fi
+
+for arg; do
+    case $arg in
+        *qcow2)
+            # mount it into the /tmp dir
+            abs_path=$(readlink -f "$arg")
+            base=$(basename "$arg")
+            new_arg=/tmp/$base
+            new_args+=( "$new_arg" )
+            podman_args+=( "-v" "$abs_path:$new_arg" )
+            ;;
+        *)
+            new_args+=( "$arg" )
+            ;;
+    esac
+done
+
+set -x
+
+exec podman run \
+    --privileged \
+    -v "${podman_args[@]}" \
+    -v /dev/kvm:/dev/kvm \
+    -a stdin,stdout,stderr \
+    -t "$image" \
+    "$cmd" "${new_args[@]}"

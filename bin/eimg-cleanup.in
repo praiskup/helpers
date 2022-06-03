@@ -21,4 +21,4 @@
 
 @bindir@/eimg-cleanup-online "$@"
 
-virt-sysprep -a "$1" --root-password disabled "${EIMG_FINAL_SYSPREP_ARGS[@]}"
+eimg-podman-virt-sysprep -a "$1" --root-password disabled "${EIMG_FINAL_SYSPREP_ARGS[@]}"

@@ -36,6 +36,7 @@ make %{?_smp_mflags}
 %install
 %make_install
 sed '1 s|^.*$|#! /usr/bin/python3|' -i %buildroot%_bindir/wait-for-ssh
+ln -s eimg-podman-guestfish %buildroot%_bindir/eimg-podman-virt-sysprep
 
 
 %files
