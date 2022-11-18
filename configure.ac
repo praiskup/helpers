@@ -1,4 +1,4 @@
-AC_INIT([helpers], [0.0], [praiskup@redhat.com])
+AC_INIT([helpers], [0.1], [praiskup@redhat.com])
 
 config_aux_dir="build-aux"
 AC_SUBST([config_aux_dir])
