@@ -76,11 +76,12 @@ write-append /etc/rc.d/rc.local "test -e /config/eimg-early-script.sh || { umoun
 write-append /etc/rc.d/rc.local "sh -x /config/eimg-early-script.sh\n"
 chmod 0755   /etc/rc.d/rc.local
 
-# Disable systemd-resolved
+# Disable systemd-resolved, and let network manager to generate resolv.conf
 rm /etc/systemd/system/dbus-org.freedesktop.resolve1.service
 rm-f /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
 ln-sf /dev/null /etc/systemd/system/systemd-resolved.service
-
+rm-f /etc/resolv.conf
+touch /etc/resolv.conf
 touch /.autorelabel
 EOF
 
