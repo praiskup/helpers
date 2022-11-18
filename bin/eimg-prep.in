@@ -36,7 +36,7 @@ case $(uname -m) in
         ;;
 esac
 
-guestfish <<EOF
+guestfish -v <<EOF
 add $opt_image
 run
 #mount /dev/$part /
@@ -78,7 +78,8 @@ chmod 0755   /etc/rc.d/rc.local
 
 # Disable systemd-resolved
 rm /etc/systemd/system/dbus-org.freedesktop.resolve1.service
-rm /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
+rm-f /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
+ln-sf /dev/null /etc/systemd/system/systemd-resolved.service
 
 touch /.autorelabel
 EOF
