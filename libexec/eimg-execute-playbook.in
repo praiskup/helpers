@@ -8,5 +8,8 @@ eimg_load_ip
 
 cd "$EIMG_PLAYBOOK_DIR" || exit 1
 
+# Sometimes the IPA in Red Hat Copr deployment slows the initial connection
+# down.
+ANSIBLE_TIMEOUT=200 \
 ANSIBLE_HOST_KEY_CHECKING=False \
 ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK"
