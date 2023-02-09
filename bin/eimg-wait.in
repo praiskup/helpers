@@ -35,9 +35,12 @@ trap cleanup EXIT
 
 echo "using $workdir"
 
+
 virt-install \
+    --os-variant "fedora37" \
     --name "$eimg_virt_name" \
     --disk "$image" \
+    --disk size=4 \
     --memory=2048 \
     --import \
     --rng /dev/urandom \
