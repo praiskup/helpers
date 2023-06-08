@@ -37,7 +37,7 @@ echo "using $workdir"
 
 
 virt-install \
-    --os-variant "fedora37" \
+    --os-variant "fedora-unknown" \
     --name "$eimg_virt_name" \
     --disk "$image" \
     --disk size=4 \
