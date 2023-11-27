@@ -22,6 +22,7 @@
 
 tmpdir=/tmp
 orig_image=$1
+image_type=${2-builder}
 eimg_download_image "$orig_image"
 image_wip=$(mktemp "$tmpdir/wip-image-XXXXX.qcow2")
 
@@ -41,11 +42,19 @@ test -f "$key_name" || {
 
 cp -f "$eimg_download_image_result" "$image_wip"
 
+run_playbook()
+{
+    # no playbook for the infra images
+    test "$image_type" = infra && return 0
+    EIMG_PLAYBOOK=$EIMG_COPR_PLAYBOOK EIMG_PLAYBOOK_DIR=$EIMG_COPR_PLAYBOOK_DIR \
+    @libexecdir@/eimg-execute-playbook
+}
+
+
 @bindir@/eimg-prep "$image_wip" \
     && @bindir@/eimg-wait "$image_wip" \
     && EIMG_WAITED=: @bindir@/eimg-update "$image_wip" \
-    && EIMG_PLAYBOOK=$EIMG_COPR_PLAYBOOK EIMG_PLAYBOOK_DIR=$EIMG_COPR_PLAYBOOK_DIR \
-        @libexecdir@/eimg-execute-playbook \
+    && run_playbook \
     && EIMG_WAITED=: @bindir@/eimg-cleanup-online "$image_wip" \
     && @libexecdir@/eimg-stop "$image_wip" \
     && virt-sysprep -a "$image_wip" --root-password disabled "${EIMG_FINAL_SYSPREP_ARGS[@]}" \

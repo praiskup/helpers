@@ -9,6 +9,5 @@ bin     SCRIPTS         eimg-update
 bin     SCRIPTS         eimg-wait
 bin     SCRIPTS         fix-fedora-cloud-image
 bin     SCRIPTS         copr-image
-bin     SCRIPTS         copr-image-infra
 bin     SCRIPTS         copr-run-aws-instance
 bin     SCRIPTS         copr-stop-aws-instance
