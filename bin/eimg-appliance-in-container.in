@@ -2,7 +2,7 @@
 
 set -e
 
-image=fedora:37
+image=fedora:39
 appliance_dir=$1
 die() { echo >&2 "ERROR: $*"; exit 1; }
 
