@@ -12,6 +12,7 @@ mkdir -p "$appliance_dir"
 
 podman run --security-opt label=disable --rm -ti -v "$appliance_dir:/appliance" $image /bin/sh -c '
     dnf install -y libguestfs-devel
+    dnf install -y kernel-core
     dnf update -y kernel-core
     export LIBGUESTFS_BACKEND=direct
     libguestfs-make-fixed-appliance /appliance
