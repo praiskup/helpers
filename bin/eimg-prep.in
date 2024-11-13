@@ -40,7 +40,8 @@ guestfish -v <<EOF
 add $opt_image
 run
 #mount /dev/$part /
-mount btrfsvol:/dev/sda5/root /
+#mount btrfsvol:/dev/sda5/root /
+mount btrfsvol:/dev/sda4/root /
 copy-out /etc/ssh/sshd_config $dir
 !sed -i -e "s/^PasswordAuthentication.*/PasswordAuthentication yes/" -e "s/#\\?PermitRootLogin.*/PermitRootLogin yes/" $dir/sshd_config
 copy-in $dir/sshd_config /etc/ssh
