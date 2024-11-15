@@ -42,12 +42,14 @@ try:
 except libvirt.libvirtError:
     sys.exit(1)
 
+
 def _main():
     found = False
     found_ipv4 = False
     for interface in interfaces:
         log.debug("checking interface %s", interface)
-        if interface != 'eth0':
+        # F41 moved to enp1s0 from eth0
+        if interface not in ['eth0', 'enp1s0']:
             log.debug("skipping interface %s", interface)
             continue
 
@@ -64,16 +66,18 @@ def _main():
         for address in interfaces[interface]['addrs']:
             if address['type'] != libvirt.VIR_IP_ADDR_TYPE_IPV4:
                 continue
+            log.debug("addr for %s is %s", interface, address["addr"])
             print(address['addr'])
             sys.exit(0)
 
     if not found:
-        log.error("interface eth0 not found")
+        log.error("interface found")
 
     if not found_ipv4:
-        log.error("eth0 has no ipv4 addres (yet?)")
+        log.error("no ipv4 address (yet?)")
 
     sys.exit(1)
+
 
 if __name__ == "__main__":
     _main()

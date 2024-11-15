@@ -29,24 +29,23 @@ cleanup()
 }
 trap cleanup EXIT
 
-part=sda1
+part=sda4
 case $(uname -m) in
     ppc64le)
-        part=sda2
+        part=sda3
         ;;
 esac
 
 guestfish -v <<EOF
 add $opt_image
 run
-#mount /dev/$part /
-#mount btrfsvol:/dev/sda5/root /
-mount btrfsvol:/dev/sda4/root /
+mount btrfsvol:/dev/$part/root /
 copy-out /etc/ssh/sshd_config $dir
 !sed -i -e "s/^PasswordAuthentication.*/PasswordAuthentication yes/" -e "s/#\\?PermitRootLogin.*/PermitRootLogin yes/" $dir/sshd_config
 copy-in $dir/sshd_config /etc/ssh
 chown 0 0 /etc/ssh/sshd_config
 chmod 0600 /etc/ssh/sshd_config
+#setxattr security.selinux system_u:object_r:etc_t:s0 27 /etc/ssh/sshd_config
 
 copy-in @eimgfilesdir@/keep-one-kernel.sh /usr/bin
 chmod 0755 /usr/bin/keep-one-kernel.sh
@@ -57,6 +56,7 @@ copy-out /etc/shadow $dir
 copy-in $dir/shadow /etc
 chmod 0000 /etc/shadow
 chown 0 0 /etc/shadow
+#setxattr security.selinux system_u:object_r:shadow_t:s0 30 /etc/shadow
 
 # cloud-init config
 copy-out /etc/cloud/cloud.cfg $dir
@@ -83,7 +83,6 @@ rm-f /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
 ln-sf /dev/null /etc/systemd/system/systemd-resolved.service
 rm-f /etc/resolv.conf
 touch /etc/resolv.conf
-touch /.autorelabel
 EOF
 
 packages=qemu-guest-agent
@@ -96,4 +95,5 @@ esac
 
 virt-sysprep -a "$opt_image" --network \
     --install $packages \
-    --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub"
+    --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub" \
+    --selinux-relabel
