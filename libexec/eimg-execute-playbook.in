@@ -3,6 +3,7 @@
 . "@eimgdatadir@"/lib
 : ${EIMG_PLAYBOOK=local-image-update.yml}
 : ${EIMG_PLAYBOOK_DIR=/tmp}
+: ${EIMG_ANSIBLE_IN_CONTAINER=false}
 
 eimg_load_ip
 
@@ -10,6 +11,19 @@ cd "$EIMG_PLAYBOOK_DIR" || exit 1
 
 # Sometimes the IPA in Red Hat Copr deployment slows the initial connection
 # down.
-ANSIBLE_TIMEOUT=200 \
-ANSIBLE_HOST_KEY_CHECKING=False \
-ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK"
+export ANSIBLE_TIMEOUT=200
+export ANSIBLE_HOST_KEY_CHECKING=False
+
+cmd=( ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK" )
+
+if $EIMG_ANSIBLE_IN_CONTAINER; then
+  podman run --rm -ti --privileged \
+    -e ANSIBLE_HOST_KEY_CHECKING \
+    -e ANSIBLE_TIMEOUT \
+    -v "$EIMG_PLAYBOOK_DIR:$EIMG_PLAYBOOK_DIR:z" \
+    -v "$HOME/.ssh:$HOME/.ssh:z" \
+    ansible \
+    "${cmd[@]}"
+else
+  "${cmd[@]}"
+fi

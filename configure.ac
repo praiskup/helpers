@@ -21,6 +21,7 @@ _AX_TEXT_TPL_SUBST([eimgdatadir], ['${datadir}/eimg'])
 _AX_TEXT_TPL_SUBST([eimgtemplates], ['${eimgdatadir}/templates'])
 _AX_TEXT_TPL_SUBST([eimgfilesdir], ['${eimgdatadir}/files'])
 _AX_TEXT_TPL_SUBST([eimgconfdir], ['${sysconfdir}/eimg'])
+_AX_TEXT_TPL_SUBST([ansible_containerdir], ['${eimgdatadir}/ansible-container'])
 
 conf_path([eimg_copr_playbook_dir], [/usr/srv])
 conf_path([eimg_copr_playbook], [local-image-update.yml])

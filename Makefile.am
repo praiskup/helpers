@@ -8,6 +8,7 @@ noinst_DATA = praiskup-helpers.spec
 
 EXTRA_DIST = build-aux/gen-makefile-am praiskup-helpers.spec.in \
 	     git-submodules/wait-for-ssh/wait-for-ssh
+
 CLEANFILES =
 DISTCLEANFILES =
 

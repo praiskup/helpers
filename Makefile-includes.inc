@@ -15,6 +15,7 @@ include $(srcdir)/bin/Makefile.inc
 include $(srcdir)/libexec/Makefile.inc
 include $(srcdir)/share/eimg/Makefile.inc
 include $(srcdir)/etc/eimg/Makefile.inc
+include $(srcdir)/share/eimg/ansible-container/Makefile.inc
 
 # static
 include $(srcdir)/share/eimg/files/Makefile.inc

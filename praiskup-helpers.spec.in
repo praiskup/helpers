@@ -50,6 +50,7 @@ sed '1 s|^.*$|#! /usr/bin/python3|' -i %buildroot%_bindir/wait-for-ssh
 %_datadir/eimg/files
 %dir %_sysconfdir/eimg
 %config(noreplace) %_sysconfdir/eimg/eimg.sh
+%_datadir/eimg/ansible-container
 
 %changelog
 * Sat Mar 27 2021 Pavel Raiskup <praiskup@redhat.com> - 0.0
