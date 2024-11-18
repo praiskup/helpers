@@ -68,7 +68,7 @@ eimg_wait_for_ip ()
 
 eimg_guess_pkg_manager ()
 {
-    eimg_pkg_manager=$(@insecure_ssh@ "root@$eimg_ip" 'if rpm -q dnf &>/dev/null; then echo dnf; elif rpm -q microdnf &>/dev/null; then echo microdnf; else echo yum; fi')
+    eimg_pkg_manager=$(@insecure_ssh@ "root@$eimg_ip" 'if test -e /usr/bin/dnf  &>/dev/null; then echo dnf; elif rpm -q microdnf &>/dev/null; then echo microdnf; else echo yum; fi')
     eimg_info "Guessed package manager: $eimg_pkg_manager"
 }
 
