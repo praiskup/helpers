@@ -18,13 +18,13 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 cmd=( ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK" )
 
 if $EIMG_ANSIBLE_IN_CONTAINER; then
-  podman run --rm -ti --privileged \
+  while ! podman run --rm -ti --privileged \
     -e ANSIBLE_HOST_KEY_CHECKING \
     -e ANSIBLE_TIMEOUT \
     -v "$EIMG_PLAYBOOK_DIR:$EIMG_PLAYBOOK_DIR:z" \
     -v "$HOME/.ssh:$HOME/.ssh:z" \
     ansible \
-    "${cmd[@]}"
+  "${cmd[@]}" ; do echo retrying; done
 else
   "${cmd[@]}"
 fi
