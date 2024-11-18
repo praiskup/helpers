@@ -1,5 +1,6 @@
-#! /bin/bash
+#! /bin/bash -x
 
+. "@eimgconfdir@/eimg.sh"
 . "@eimgdatadir@"/lib
 : ${EIMG_PLAYBOOK=local-image-update.yml}
 : ${EIMG_PLAYBOOK_DIR=/tmp}
