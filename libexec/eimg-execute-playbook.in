@@ -30,6 +30,7 @@ Playbook failed.  Retrying.  Known things you might need to do async:
 - systemctl start user@11666
 - chown copr:copr -R /home/copr/provision
 EOF
+    sleep 10
   done
 else
   "${cmd[@]}"
