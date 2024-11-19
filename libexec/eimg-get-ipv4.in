@@ -49,7 +49,7 @@ def _main():
     for interface in interfaces:
         log.debug("checking interface %s", interface)
         # F41 moved to enp1s0 from eth0
-        if interface not in ['eth0', 'enp1s0']:
+        if interface not in ['eth0', 'enp1s0', 'enp0s1']:
             log.debug("skipping interface %s", interface)
             continue
 
