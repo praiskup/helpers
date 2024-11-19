@@ -64,6 +64,10 @@ eimg_wait_for_ip ()
     until eimg_ip=$( @libexecdir@/eimg-get-ipv4 "$eimg_virt_name" ); do
         sleep 3
     done
+    if ${EIMG_DOUBLECHECK_WAITING_FOR_IPV4-false}; then
+        sleep 30
+        eimg_ip=$( @libexecdir@/eimg-get-ipv4 "$eimg_virt_name" )
+    fi
 }
 
 eimg_guess_pkg_manager ()
