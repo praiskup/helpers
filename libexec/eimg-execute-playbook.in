@@ -24,7 +24,13 @@ if $EIMG_ANSIBLE_IN_CONTAINER; then
     -v "$EIMG_PLAYBOOK_DIR:$EIMG_PLAYBOOK_DIR:z" \
     -v "$HOME/.ssh:$HOME/.ssh:z" \
     ansible \
-  "${cmd[@]}" ; do echo retrying; done
+  "${cmd[@]}" ; do
+    cat <<EOF
+Playbook failed.  Retrying.  Known things you might need to do async:
+- systemctl start user@11666
+- chown copr:copr -R /home/copr/provision
+EOF
+  done
 else
   "${cmd[@]}"
 fi
