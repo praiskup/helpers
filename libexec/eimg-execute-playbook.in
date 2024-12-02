@@ -15,7 +15,7 @@ cd "$EIMG_PLAYBOOK_DIR" || exit 1
 export ANSIBLE_TIMEOUT=200
 export ANSIBLE_HOST_KEY_CHECKING=False
 
-cmd=( ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK" )
+cmd=( ansible-playbook -i "$eimg_ip," "$EIMG_PLAYBOOK" "${EIMG_PLAYBOOK_ARGS[@]}" )
 
 if $EIMG_ANSIBLE_IN_CONTAINER; then
   while ! podman run --rm -ti --privileged \
