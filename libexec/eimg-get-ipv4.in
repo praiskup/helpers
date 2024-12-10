@@ -21,6 +21,7 @@ Obtain ipv4 address from a given domain; using qemu agent.
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import logging
+import subprocess
 import sys
 
 import libvirt
@@ -67,8 +68,20 @@ def _main():
             if address['type'] != libvirt.VIR_IP_ADDR_TYPE_IPV4:
                 continue
             log.debug("addr for %s is %s", interface, address["addr"])
-            print(address['addr'])
-            sys.exit(0)
+
+            log.debug("waiting for ssh for 120 seconds")
+            process = subprocess.run(
+                ["wait-for-ssh", "--log=debug", "--timeout=60", address['addr']],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+
+            if process.returncode == 0:
+                log.debug("ssh succeeded for %s", address['addr'])
+                print(address['addr'])
+                sys.exit(0)
+
+            log.error("ssh failed for %s, reason: %s", address['addr'], process.stderr)
 
     if not found:
         log.error("interface found")
