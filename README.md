@@ -3,6 +3,9 @@ Helper scripts, some are related to Copr build system maintenance.
 Generating copr images
 ----------------------
 
+This project is heavily outdated.  Please consider looking at our
+[image-builder][] repo.
+
 The `copr-image` script is basically a generic way to modify a qcow2 image by
 using a ansible playbook.  It downloads the given qcow2 image, prepares it with
 virt-sysprep, starts a VM using that image and executes the playbook against the
@@ -37,3 +40,4 @@ Builds from the `main` branch are in [copr repo][copr_repo].
 Last build: [![last build](https://copr.fedorainfracloud.org/coprs/praiskup/helpers/package/praiskup-helpers/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/praiskup/helpers/package/praiskup-helpers/)
 
 [copr_repo]: https://copr.fedorainfracloud.org/coprs/praiskup/helpers/
+[image-builder]: https://github.com/fedora-copr/copr-image-builder
